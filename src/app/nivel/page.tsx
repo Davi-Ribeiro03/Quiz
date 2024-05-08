@@ -1,24 +1,26 @@
 import OptionsCard from "@/components/optionsCard/OptionsCard";
-import axios from "axios";
+import Link from "next/link";
 import React from "react";
 
-const Home = () => {
+const Nivel = () => {
   return (
-    <main>
+    <div>
       <h1 className="text-white text-6xl font-normal text-center pt-8">
         Welcome to the <strong className="font-extrabold">Quiz</strong>
       </h1>
+      <Link href="/">Voltar</Link>
       <p className="w-full text-center text-xl pt-32 text-white font-medium">
-        Select the theme below
+        Select the desired level
       </p>
+      {/* {optionsQuiz} */}
 
       <OptionsCard
-        options={["Frontend", "Backend"]}
-        href="/nivel"
-        category="option"
+        options={["Fácil", "Médio", "Dificil"]}
+        href="/questions"
+        category="nivel"
       />
-    </main>
+    </div>
   );
 };
 
-export default Home;
+export default Nivel;
