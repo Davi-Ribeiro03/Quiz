@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Console } from "console";
+import Button from "@/components/button/Button";
+import Loader from "@/components/loader/Loader";
 
 const Questions = () => {
   const router = useRouter();
@@ -27,90 +29,86 @@ const Questions = () => {
     const dados: questionsResponse = await axios.get(
       `https://quiz-servidor.vercel.app/${option}`
     );
-    console.log(dados);
     if (nivel === "facil") setQuestions(dados.data.facil);
     else if (nivel === "medio") setQuestions(dados.data.medio);
     if (nivel === "dificil") setQuestions(dados.data.dificil);
   };
 
   const verificaCorreta = (question: String, index: Number) => {
-    if (
-      question.includes(`${questions[questionsIndex].resposta_correta}`) &&
-      verificaResposta === true
-    ) {
-      return "bg-green-600 hover:bg-green-600";
+    console.log(index);
+    if (question.includes(`${questions[questionsIndex].resposta_correta}`)) {
+      return "bg-[#00EE00] hover:bg-[#00EE00]";
     }
 
     if (
       !question.includes(`${questions[questionsIndex].resposta_correta}`) &&
-      verificaResposta === true &&
       index === indexOfChoseOption
     ) {
-      return "bg-red-400 hover:bg-red-400";
-    }
-
-    if (
-      !question.includes(`${questions[questionsIndex].resposta_correta}`) &&
-      verificaResposta === true
-    ) {
-      return "opacity-80";
+      return "bg-[#EE0000] hover:bg-[#EE0000]";
     }
   };
 
   useEffect(() => {
     verificaOptions();
     buscaQuestions();
-    console.log("helloo");
   }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center items-center ">
-      <div className="max-w-[80%] min-w-[80%] min-h-[80%] max-h-[95%] sm:min-w-[40%] w-auto h-auto sm:min-h-[80%] bg-bg_card  shadow-2xl rounded-2xl p-8 relative">
+      <div className="max-w-[80%] min-w-[80%]  max-h-[95%] sm:min-w-[40%] w-auto h-auto sm:min-h-[80%] bg-bg_card  shadow-2xl rounded-2xl p-8 relative">
         <span className="text-white absolute right-3 top-2 opacity-60">
           Pergunta {questionsIndex + 1} de {questions?.length}
         </span>
-        <h3 className="text-xl sm:text-2xl text-white font-medium">
-          {questions && questions[questionsIndex]?.pergunta}
-        </h3>
 
-        {questions &&
-          questions[questionsIndex]?.itens.map((question, index) => (
-            <>
-              <div
-                role="button"
-                key={index}
-                onClick={() => {
-                  setVerificaResposta(true);
-                  setIndexOfChoseOption(index);
-                  // if (
-                  //   question.includes(
-                  //     `${questions[questionsIndex].resposta_correta}`
-                  //   )
-                  // ) {
-                  //   setRespostaCorreta(true);
-                  // }
-                }}
-                className={`text-sm sm:text-lg text-white font-bolf my-4 sm:my-6 bg-main px-2 py-2 rounded-xl cursor-pointer hover:bg-[#404c64]
-              ${verificaCorreta(question, index)}`}
-              >
-                {question}
-              </div>
-            </>
-          ))}
+        {questions.length === 0 ? (
+          <Loader />
+        ) : (
+          <>
+            <h3 className="text-xl sm:text-2xl text-white font-medium">
+              {questions && questions[questionsIndex]?.pergunta}
+            </h3>
 
-        <button
-          className="w-[200px] absolute bottom-5 right-1/2 translate-x-1/2  bg-main text-center rounded-2xl py-4 text-white font-bold "
-          onClick={() => {
-            if (questionsIndex < questions?.length - 1) {
-              console.log(questionsIndex);
-              console.log(questions?.length);
-              setVerificaResposta(false);
-              setQuestionsIndex((prev) => prev + 1);
-            }
-          }}
-        >
-          Continuar
-        </button>
+            {questions &&
+              questions[questionsIndex]?.itens.map((question, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setIndexOfChoseOption(index);
+                    setVerificaResposta(true);
+                  }}
+                  className={`text-sm sm:text-lg text-white font-bolf my-4 sm:my-6  px-2 py-2 rounded-xl cursor-pointer 
+              ${
+                verificaResposta
+                  ? verificaCorreta(question, index)
+                  : "bg-main hover:bg-[#404c64]"
+              }`}
+                >
+                  {question}
+                </div>
+              ))}
+          </>
+        )}
+
+        <section className="flex gap-2 mt-12 justify-center ">
+          {questionsIndex !== questions?.length - 1 && (
+            <Button
+              onClick={() => {
+                if (questionsIndex < questions?.length - 1) {
+                  console.log(questionsIndex);
+                  console.log(questions?.length);
+                  setVerificaResposta(false);
+                  setQuestionsIndex((prev) => prev + 1);
+                }
+              }}
+            >
+              Continuar
+            </Button>
+          )}
+
+          {questionsIndex === questions?.length - 1 && (
+            <Button>Finalizar</Button>
+          )}
+        </section>
       </div>
     </div>
   );
