@@ -1,7 +1,7 @@
-interface questionsResponse{
+interface QuestionsResponse{
     data:{
-        facil:questionsProps[],
-        medio: questionsProps[],
-        dificil: questionsProps[]
+        facil:QuestionsProps[],
+        medio: QuestionsProps[],
+        dificil: QuestionsProps[]
     }
 }

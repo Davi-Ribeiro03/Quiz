@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         main:"#4B5A77",
+        right:'#00EE00',
+        wrong:'#EE0000',
         bg_card: "rgba(91,113,149,1)",
         bg_question : "#8293AE"
 
