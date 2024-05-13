@@ -1,6 +1,5 @@
 "use client";
 
-import { verificaItemEscolhido } from "@/utils/verificaItemEscolhido";
 import React from "react";
 
 interface AskAndQuestionsProps {
@@ -20,10 +19,32 @@ const AskAndQuestions = ({
   setVerificaResposta,
   verificaResposta,
 }: AskAndQuestionsProps) => {
+  const verificaItemEscolhido = (question: String, index: Number) => {
+    console.log(index);
+    if (
+      question.includes(
+        `${questions && questions[questionsIndex].resposta_correta}`
+      )
+    ) {
+      console.log("retornou verde");
+      return "bg-right";
+    }
+
+    if (
+      !question.includes(
+        `${questions && questions[questionsIndex].resposta_correta}`
+      ) &&
+      index === indexOfChoseOption
+    ) {
+      console.log("retornou vermelho");
+      return "bg-wrong";
+    }
+  };
+
   return (
     <>
       <h3 className="text-xl sm:text-2xl text-white font-medium">
-        {questions && questions[questionsIndex].pergunta}
+        {questions && questions[questionsIndex]?.pergunta}
       </h3>
 
       {questions &&
@@ -37,14 +58,8 @@ const AskAndQuestions = ({
             className={`text-sm sm:text-lg text-white font-normal my-4 sm:my-6  px-2 py-2 rounded-xl cursor-pointer 
               ${
                 verificaResposta
-                  ? verificaItemEscolhido(
-                      questions,
-                      questionsIndex,
-                      indexOfChoseOption,
-                      question,
-                      index
-                    )
-                  : "bg-main hover:bg-[#404c64]"
+                  ? verificaItemEscolhido(question, index)
+                  : "bg-main"
               }`}
           >
             {question}
