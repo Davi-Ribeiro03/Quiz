@@ -69,7 +69,7 @@ const Questions = () => {
 
           {questions !== undefined &&
             questionsIndex === questions?.length - 1 && (
-              <Button>Finalizar</Button>
+              <Button onClick={() => alert('Funcionalidade em desenvolvimento')} >Finalizar</Button>
             )}
         </section>
       </div>
